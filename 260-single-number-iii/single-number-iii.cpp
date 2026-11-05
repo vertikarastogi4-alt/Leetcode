@@ -1,21 +1,24 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-         unordered_map<int, int> frequency;
- 
+        int xorResult = 0;
         for (int num : nums) {
-            frequency[num]++;
+            xorResult ^= num;
         }
+        uint32_t bits = static_cast<uint32_t>(xorResult);
+        uint32_t mask = bits & (~bits + 1u);
  
-        vector<int> answer;
- 
-        for (auto& entry : frequency) {
-            if (entry.second == 1) {
-                answer.push_back(entry.first);
+        int group1 = 0;
+        int group2 = 0;
+        for (int num : nums) {
+            if ((static_cast<uint32_t>(num) & mask) != 0) {
+                group1 ^= num;
+            } else {
+                group2 ^= num;
             }
         }
  
-        return answer;
+        return {group1, group2};
   
     }
 };

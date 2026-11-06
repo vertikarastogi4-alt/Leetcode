@@ -1,30 +1,24 @@
 class Solution {
 public:
-    int solve(int index, vector<int>& nums, vector<int>& memo) {
-        int n = nums.size();
-
-        if (index >= n - 1)
-            return 0;
-
-        if (memo[index] != -1)
-            return memo[index];
-
-        int minJumps = INT_MAX;
-        int farthestJump = min(n - 1, index + nums[index]);
-
-        for (int nextIndex = index + 1; nextIndex <= farthestJump; nextIndex++) {
-            int nextJumps = solve(nextIndex, nums, memo);
-
-            if (nextJumps != INT_MAX) {
-                minJumps = min(minJumps, 1 + nextJumps);
-            }
-        }
-        return memo[index] = minJumps;
-    }
     int jump(vector<int>& nums) {
         int n = nums.size();
-        vector<int> memo(n, -1);
 
-        return solve(0, nums, memo);
+        if (n <= 1) return 0;
+
+        int jumps = 0;
+        int currentEnd = 0;
+        int farthest = 0;
+
+        for (int i = 0; i < n - 1; i++) {
+            farthest = max(farthest, i + nums[i]);
+
+            if (i == currentEnd) {
+                jumps++;
+                currentEnd = farthest;
+                if (currentEnd >= n - 1)
+                    break;
+            }
+        }
+        return jumps;
     }
 };
